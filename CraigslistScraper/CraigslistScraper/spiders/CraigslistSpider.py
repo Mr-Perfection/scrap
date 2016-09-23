@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
 import re
 import scrapy
-# item class included here
-class DmozItem(scrapy.Item):
-    # define the fields for your item here like:
-    link = scrapy.Field()
-    attr = scrapy.Field()
-
+from CraigslistScraper.items import DmozItem
 
 class DmozSpider(scrapy.Spider):
     name = "dmoz"
-    allowed_domains = ["craigslist.org"]
+    allowed_domains = ["sfbay.craigslist.org"]
     start_urls = [
-    "http://chicago.craigslist.org/search/vgm?"
+    "http://sfbay.craigslist.org/search/vgm?"
     ]
 
-    BASE_URL = 'http://chicago.craigslist.org/'
+    BASE_URL = 'http://sfbay.craigslist.org/'
 
     def parse(self, response):
         links = response.xpath('//a[@class="hdrlnk"]/@href').extract()
@@ -27,7 +22,7 @@ class DmozSpider(scrapy.Spider):
         match = re.search(r"(\w+)\.html", response.url)
         if match:
             item_id = match.group(1)
-            url = self.BASE_URL + "reply/chi/vgm/" + item_id
+            url = self.BASE_URL + "reply/sfb/vgm/" + item_id
 
             item = DmozItem()
             item["link"] = response.url
